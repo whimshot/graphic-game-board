@@ -2,7 +2,7 @@
 
 A C-based graphical game board library and application built with the Raspberry Pi Pico SDK for the [ClockworkPi PicoCalc](https://github.com/clockworkpi/PicoCalc).
 
-> **Note:** This README was generated from the repository's top-level directory structure and dependencies. Please see [graphic-game-board.md] for specifics on the API.
+> **Note:** This README was generated from the repository's top-level directory structure and dependencies. Please see [graphic-game-board.md](graphic-game-board.md) for specifics on the API.
 
 ## Overview
 
