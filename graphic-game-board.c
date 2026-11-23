@@ -61,7 +61,7 @@ void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE])
 
     // Draw grid lines
     int girdStart = OFFSET_PX;
-    for (int i = girdStart; i < BOARD_PX; i += CELL_SIZE)
+    for (int i = girdStart; i <= BOARD_PX + CELL_SIZE; i += CELL_SIZE)
     {
         lcd_solid_rectangle(COLOR_GRID, i, OFFSET_PX, 2, BOARD_PX);
         lcd_solid_rectangle(COLOR_GRID, OFFSET_PX, i, BOARD_PX, 2);
