@@ -59,6 +59,7 @@ target_include_directories(fatfs PUBLIC ${FATFS_DIR})
 add_executable(graphic-game-board 
         graphic-game-board.c
         graphic-game-board.h
+        main.c
         drivers/audio.c
         drivers/audio.h
         drivers/clib.c
