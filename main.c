@@ -11,6 +11,7 @@ int main()
 
     init_board(&board);
     render_board(&board);
+    int disc_color = -1; // -1 white disc, 1 black disc
     while (true)
     {
         uint8_t key = (uint8_t)keyboard_get_key(); // Get next key pressed
@@ -23,6 +24,13 @@ int main()
             break;
         case KEY_RETURN:
         case KEY_ENTER:
+            if (disc_color == -1){
+                place_piece(&white_disc, selector_c, selector_r);
+            }
+            else if (disc_color == 1){
+                place_piece(&black_disc, selector_c, selector_r);
+            }
+            disc_color = disc_color * -1; // flip disc color
             break;
         case KEY_LEFT:
             if (selector_c > 0)
