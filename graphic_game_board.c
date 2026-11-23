@@ -68,19 +68,19 @@ void draw_selection_box(int new_c, int new_r)
         int rx = OFFSET_PX + CELL_SIZE * (selection_box_c + 1); // right selection box bar
         int ly = OFFSET_PX + CELL_SIZE * selection_box_r;       // top selection box bar
         int ry = OFFSET_PX + CELL_SIZE * (selection_box_r + 1); // bottom selection box bar
-        int l = CELL_SIZE + 2;                           // selection box border bar length
-        int w = 2;                                       // selection box border bar width
-        lcd_solid_rectangle(COLOR_GRID, lx, ly, w, l);   // Left
-        lcd_solid_rectangle(COLOR_GRID, lx, ly, l, w);   // Top
-        lcd_solid_rectangle(COLOR_GRID, rx, ly, w, l);   // Right
-        lcd_solid_rectangle(COLOR_GRID, lx, ry, l, w);   // Bottom
+        int l = CELL_SIZE + 2;                                  // selection box border bar length
+        int w = 2;                                              // selection box border bar width
+        lcd_solid_rectangle(COLOR_GRID, lx, ly, w, l);          // Left
+        lcd_solid_rectangle(COLOR_GRID, lx, ly, l, w);          // Top
+        lcd_solid_rectangle(COLOR_GRID, rx, ly, w, l);          // Right
+        lcd_solid_rectangle(COLOR_GRID, lx, ry, l, w);          // Bottom
     }
-    int lx = OFFSET_PX + CELL_SIZE * new_c;          // left selection box bar
-    int rx = OFFSET_PX + CELL_SIZE * (new_c + 1);    // right selection box bar
-    int ly = OFFSET_PX + CELL_SIZE * new_r;          // top selection box bar
-    int ry = OFFSET_PX + CELL_SIZE * (new_r + 1);    // bottom selection box bar
-    int l = CELL_SIZE + 2;                           // selection box border bar length
-    int w = 2;                                       // selection box border bar width
+    int lx = OFFSET_PX + CELL_SIZE * new_c;                 // left selection box bar
+    int rx = OFFSET_PX + CELL_SIZE * (new_c + 1);           // right selection box bar
+    int ly = OFFSET_PX + CELL_SIZE * new_r;                 // top selection box bar
+    int ry = OFFSET_PX + CELL_SIZE * (new_r + 1);           // bottom selection box bar
+    int l = CELL_SIZE + 2;                                  // selection box border bar length
+    int w = 2;                                              // selection box border bar width
     lcd_solid_rectangle(COLOR_SELECTION_BOX, lx, ly, w, l); // Left
     lcd_solid_rectangle(COLOR_SELECTION_BOX, lx, ly, l, w); // Top
     lcd_solid_rectangle(COLOR_SELECTION_BOX, rx, ly, w, l); // Right
@@ -150,27 +150,27 @@ int main()
         case KEY_ENTER:
             break;
         case KEY_LEFT:
-            if (selection_box_c > 0){
+            if (selection_box_c > 0)
+            {
                 draw_selection_box(selection_box_c - 1, selection_box_r);
-                printf("\033[Hselection_box_c: %d, selection_box_r: %d", selection_box_c, selection_box_r);
             }
             break;
         case KEY_RIGHT:
-            if (selection_box_c < BOARD_SIZE - 1){
+            if (selection_box_c < BOARD_SIZE - 1)
+            {
                 draw_selection_box(selection_box_c + 1, selection_box_r);
-                printf("\033[Hselection_box_c: %d, selection_box_r: %d", selection_box_c, selection_box_r);
             }
             break;
         case KEY_UP:
-            if (selection_box_r > 0){
+            if (selection_box_r > 0)
+            {
                 draw_selection_box(selection_box_c, selection_box_r - 1);
-                printf("\033[Hselection_box_c: %d, selection_box_r: %d", selection_box_c, selection_box_r);
             }
             break;
         case KEY_DOWN:
-            if (selection_box_r < BOARD_SIZE - 1){
+            if (selection_box_r < BOARD_SIZE - 1)
+            {
                 draw_selection_box(selection_box_c, selection_box_r + 1);
-                printf("\033[Hselection_box_c: %d, selection_box_r: %d", selection_box_c, selection_box_r);
             }
             break;
         default:
