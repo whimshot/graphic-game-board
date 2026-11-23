@@ -28,7 +28,7 @@ set(PICO_BOARD pico2 CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(graphic_game_board C CXX ASM)
+project(graphic-game-board C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
@@ -56,8 +56,9 @@ target_include_directories(fatfs PUBLIC ${FATFS_DIR})
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(graphic_game_board 
-        graphic_game_board.c
+add_executable(graphic-game-board 
+        graphic-game-board.c
+        graphic-game-board.h
         drivers/audio.c
         drivers/audio.h
         drivers/clib.c
@@ -83,23 +84,23 @@ add_executable(graphic_game_board
         drivers/southbridge.h
 )
 
-pico_set_program_name(graphic_game_board "graphic_game_board")
-pico_set_program_version(graphic_game_board "0.1")
+pico_set_program_name(graphic-game-board "graphic-game-board")
+pico_set_program_version(graphic-game-board "v0.4.0")
 
 # Generate PIO header
-pico_generate_pio_header(graphic_game_board ${CMAKE_CURRENT_LIST_DIR}/drivers/audio.pio)
+pico_generate_pio_header(graphic-game-board ${CMAKE_CURRENT_LIST_DIR}/drivers/audio.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(graphic_game_board 0)
-pico_enable_stdio_usb(graphic_game_board 0)
+pico_enable_stdio_uart(graphic-game-board 0)
+pico_enable_stdio_usb(graphic-game-board 0)
 
 # Add the standard library to the build
-target_link_libraries(graphic_game_board
+target_link_libraries(graphic-game-board
         fatfs
 )
 
 # Add the standard include files to the build
-target_include_directories(graphic_game_board PRIVATE
+target_include_directories(graphic-game-board PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/third_party/picocalc-shell
 )
@@ -107,12 +108,12 @@ target_include_directories(graphic_game_board PRIVATE
 # The PicoCalc shell's clock, for file dates, is in the RP2350's always-on
 # timer (POWMAN). The RP2040 has none, and its files are left undated.
 if (TARGET hardware_powman)
-    target_link_libraries(graphic_game_board hardware_powman)
+    target_link_libraries(graphic-game-board hardware_powman)
 endif()
 MESSAGE( STATUS "cmake current list dir: ${CMAKE_CURRENT_LIST_DIR}" )
 
 # Add any user requested libraries
-target_link_libraries(graphic_game_board
+target_link_libraries(graphic-game-board
         pico_stdlib
         pico_printf
         pico_float
@@ -125,5 +126,5 @@ target_link_libraries(graphic_game_board
         hardware_clocks
         )
 
-pico_add_extra_outputs(graphic_game_board)
+pico_add_extra_outputs(graphic-game-board)
 
