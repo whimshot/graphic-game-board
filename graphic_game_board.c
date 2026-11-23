@@ -34,7 +34,7 @@ volatile bool user_interrupt = false;
 #define COLOR_GRID RGB565(2, 4, 2)
 #define COLOR_BLACK_DISC RGB565(0, 0, 0)
 #define COLOR_WHITE_DISC RGB565(240, 240, 245)
-#define COLOR_CURSOR RGB565(255, 215, 0)
+#define COLOR_SELECTION_BOX RGB565(255, 215, 0)
 
 // Piece states
 enum
@@ -46,8 +46,8 @@ enum
 
 // Game state
 static uint8_t board[BOARD_SIZE][BOARD_SIZE];
-static int cursor_r = 2;
-static int cursor_c = 3;
+static int selection_box_r = 2;
+static int selection_box_c = 3;
 
 static void init_board(void)
 {
@@ -59,36 +59,36 @@ static void init_board(void)
     board[4][4] = WHITE;
 }
 
-void draw_cursor(int new_c, int new_r)
+void draw_selection_box(int new_c, int new_r)
 {
-    // if the cursor position has changed erase the old cursor
-    if (new_r != cursor_r || new_c != cursor_c)
+    // if the selection box position has changed erase the old selection box
+    if (new_r != selection_box_r || new_c != selection_box_c)
     {
-        int lx = OFFSET_PX + CELL_SIZE * cursor_c;       // left cursor bar
-        int rx = OFFSET_PX + CELL_SIZE * (cursor_c + 1); // right cursor bar
-        int ly = OFFSET_PX + CELL_SIZE * cursor_r;       // top cursor bar
-        int ry = OFFSET_PX + CELL_SIZE * (cursor_r + 1); // bottom cursor bar
-        int l = CELL_SIZE + 2;                           // cursor border bar length
-        int w = 2;                                       // cursor border bar width
+        int lx = OFFSET_PX + CELL_SIZE * selection_box_c;       // left selection box bar
+        int rx = OFFSET_PX + CELL_SIZE * (selection_box_c + 1); // right selection box bar
+        int ly = OFFSET_PX + CELL_SIZE * selection_box_r;       // top selection box bar
+        int ry = OFFSET_PX + CELL_SIZE * (selection_box_r + 1); // bottom selection box bar
+        int l = CELL_SIZE + 2;                           // selection box border bar length
+        int w = 2;                                       // selection box border bar width
         lcd_solid_rectangle(COLOR_GRID, lx, ly, w, l);   // Left
         lcd_solid_rectangle(COLOR_GRID, lx, ly, l, w);   // Top
         lcd_solid_rectangle(COLOR_GRID, rx, ly, w, l);   // Right
         lcd_solid_rectangle(COLOR_GRID, lx, ry, l, w);   // Bottom
     }
-    int lx = OFFSET_PX + CELL_SIZE * new_c;          // left cursor bar
-    int rx = OFFSET_PX + CELL_SIZE * (new_c + 1);    // right cursor bar
-    int ly = OFFSET_PX + CELL_SIZE * new_r;          // top cursor bar
-    int ry = OFFSET_PX + CELL_SIZE * (new_r + 1);    // bottom cursor bar
-    int l = CELL_SIZE + 2;                           // cursor border bar length
-    int w = 2;                                       // cursor border bar width
-    lcd_solid_rectangle(COLOR_CURSOR, lx, ly, w, l); // Left
-    lcd_solid_rectangle(COLOR_CURSOR, lx, ly, l, w); // Top
-    lcd_solid_rectangle(COLOR_CURSOR, rx, ly, w, l); // Right
-    lcd_solid_rectangle(COLOR_CURSOR, lx, ry, l, w); // Bottom
+    int lx = OFFSET_PX + CELL_SIZE * new_c;          // left selection box bar
+    int rx = OFFSET_PX + CELL_SIZE * (new_c + 1);    // right selection box bar
+    int ly = OFFSET_PX + CELL_SIZE * new_r;          // top selection box bar
+    int ry = OFFSET_PX + CELL_SIZE * (new_r + 1);    // bottom selection box bar
+    int l = CELL_SIZE + 2;                           // selection box border bar length
+    int w = 2;                                       // selection box border bar width
+    lcd_solid_rectangle(COLOR_SELECTION_BOX, lx, ly, w, l); // Left
+    lcd_solid_rectangle(COLOR_SELECTION_BOX, lx, ly, l, w); // Top
+    lcd_solid_rectangle(COLOR_SELECTION_BOX, rx, ly, w, l); // Right
+    lcd_solid_rectangle(COLOR_SELECTION_BOX, lx, ry, l, w); // Bottom
 
-    // set new cursor position
-    cursor_c = new_c;
-    cursor_r = new_r;
+    // set new selection box position
+    selection_box_c = new_c;
+    selection_box_r = new_r;
 }
 
 void render_graphic_board(void)
@@ -118,7 +118,7 @@ void render_graphic_board(void)
             lcd_solid_rectangle(disc_color, cx, cy, 3, 3);
         }
     }
-    draw_cursor(cursor_r, cursor_c);
+    draw_selection_box(selection_box_r, selection_box_c);
 }
 
 int main()
@@ -150,27 +150,27 @@ int main()
         case KEY_ENTER:
             break;
         case KEY_LEFT:
-            if (cursor_c > 0){
-                draw_cursor(cursor_c - 1, cursor_r);
-                printf("\033[Hcursor_c: %d, cursor_r: %d", cursor_c, cursor_r);
+            if (selection_box_c > 0){
+                draw_selection_box(selection_box_c - 1, selection_box_r);
+                printf("\033[Hselection_box_c: %d, selection_box_r: %d", selection_box_c, selection_box_r);
             }
             break;
         case KEY_RIGHT:
-            if (cursor_c < BOARD_SIZE - 1){
-                draw_cursor(cursor_c + 1, cursor_r);
-                printf("\033[Hcursor_c: %d, cursor_r: %d", cursor_c, cursor_r);
+            if (selection_box_c < BOARD_SIZE - 1){
+                draw_selection_box(selection_box_c + 1, selection_box_r);
+                printf("\033[Hselection_box_c: %d, selection_box_r: %d", selection_box_c, selection_box_r);
             }
             break;
         case KEY_UP:
-            if (cursor_r > 0){
-                draw_cursor(cursor_c, cursor_r - 1);
-                printf("\033[Hcursor_c: %d, cursor_r: %d", cursor_c, cursor_r);
+            if (selection_box_r > 0){
+                draw_selection_box(selection_box_c, selection_box_r - 1);
+                printf("\033[Hselection_box_c: %d, selection_box_r: %d", selection_box_c, selection_box_r);
             }
             break;
         case KEY_DOWN:
-            if (cursor_r < BOARD_SIZE - 1){
-                draw_cursor(cursor_c, cursor_r + 1);
-                printf("\033[Hcursor_c: %d, cursor_r: %d", cursor_c, cursor_r);
+            if (selection_box_r < BOARD_SIZE - 1){
+                draw_selection_box(selection_box_c, selection_box_r + 1);
+                printf("\033[Hselection_box_c: %d, selection_box_r: %d", selection_box_c, selection_box_r);
             }
             break;
         default:
