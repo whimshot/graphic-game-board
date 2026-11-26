@@ -44,6 +44,9 @@
 #define COLOR_WHITE_DISC RGB565(224, 224, 224)
 #define COLOR_SELECTION_BOX RGB565(255, 215, 0)
 
+#define START_POSITION_ROW 2
+#define START_POSITION_COLUMN 3
+
 // --- typedefs and declarations ---
 
 extern const uint16_t white_disc[SPRITE_SIZE * SPRITE_SIZE];
@@ -65,7 +68,10 @@ extern uint8_t board[BOARD_SIZE][BOARD_SIZE];
 
 void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
 void place_piece(const uint16_t (*piece)[SPRITE_SIZE * SPRITE_SIZE], int c, int r);
+void erase_selector(void);
 void draw_selector(int new_c, int new_r);
+void move_selector(int new_c, int new_r);
 void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
+void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
 
 #endif

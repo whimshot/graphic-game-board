@@ -11,6 +11,8 @@
  * - Escape / Q / q: Exit back to the PicoCalc shell.
  */
 
+#include "pico/bootrom.h"
+
 #include "graphic-game-board.h"
 
 int main()
@@ -50,45 +52,45 @@ int main()
         case KEY_ENTER:
             if (disc_color == -1)
             {
-                place_piece(&white_disc, selector_c, selector_r);
+                place_piece(&white_disc, selector_r, selector_c);
             }
             else if (disc_color == 1)
             {
-                place_piece(&black_disc, selector_c, selector_r);
+                place_piece(&black_disc, selector_r, selector_c);
             }
             disc_color = disc_color * -1; // Alternate player turn (-1 <-> 1)
             break;
 
-        // Move selection cursor left if not already on the left edge
-        case KEY_LEFT:
-            if (selector_c > 0)
-            {
-                draw_selector(selector_c - 1, selector_r);
-            }
-            break;
-
-        // Move selection cursor right if not already on the right edge
-        case KEY_RIGHT:
-            if (selector_c < BOARD_SIZE - 1)
-            {
-                draw_selector(selector_c + 1, selector_r);
-            }
-            break;
-
-        // Move selection cursor up if not already on the top edge
         case KEY_UP:
             if (selector_r > 0)
             {
-                draw_selector(selector_c, selector_r - 1);
+                move_selector(selector_r - 1, selector_c);
             }
             break;
 
-        // Move selection cursor down if not already on the bottom edge
         case KEY_DOWN:
             if (selector_r < BOARD_SIZE - 1)
             {
-                draw_selector(selector_c, selector_r + 1);
+                move_selector(selector_r + 1, selector_c);
             }
+            break;
+
+        case KEY_RIGHT:
+            if (selector_c < BOARD_SIZE - 1)
+            {
+                move_selector(selector_r, selector_c + 1);
+            }
+            break;
+
+        case KEY_LEFT:
+            if (selector_c > 0)
+            {
+                move_selector(selector_r, selector_c - 1);
+            }
+            break;
+
+        case KEY_DEL:
+            reset_usb_boot(0, 0);
             break;
 
         // Ignore any unmapped keys

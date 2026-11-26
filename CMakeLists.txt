@@ -86,7 +86,7 @@ add_executable(graphic-game-board
 )
 
 pico_set_program_name(graphic-game-board "graphic-game-board")
-pico_set_program_version(graphic-game-board "v0.4.0")
+pico_set_program_version(graphic-game-board "v1.0.0")
 
 # Generate PIO header
 pico_generate_pio_header(graphic-game-board ${CMAKE_CURRENT_LIST_DIR}/drivers/audio.pio)
