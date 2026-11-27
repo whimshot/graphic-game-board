@@ -26,9 +26,11 @@ int main()
     sb_write_lcd_backlight(255);
     sb_write_keyboard_backlight(255);
 
+    char board_type = CHECKERS;
     // Set up the initial game board state and draw it to the screen
-    init_board(&board);
-    render_board(&board);
+    init_board(&board, board_type);
+    render_board(&board, board_type);
+    // draw_checkers_board();
 
     // Track current turn: -1 represents white disc, 1 represents black disc
     int disc_color = -1;
@@ -64,28 +66,28 @@ int main()
         case KEY_UP:
             if (selector_r > 0)
             {
-                move_selector(selector_r - 1, selector_c);
+                move_selector(selector_r - 1, selector_c, board_type);
             }
             break;
 
         case KEY_DOWN:
             if (selector_r < BOARD_SIZE - 1)
             {
-                move_selector(selector_r + 1, selector_c);
+                move_selector(selector_r + 1, selector_c, board_type);
             }
             break;
 
         case KEY_RIGHT:
             if (selector_c < BOARD_SIZE - 1)
             {
-                move_selector(selector_r, selector_c + 1);
+                move_selector(selector_r, selector_c + 1, board_type);
             }
             break;
 
         case KEY_LEFT:
             if (selector_c > 0)
             {
-                move_selector(selector_r, selector_c - 1);
+                move_selector(selector_r, selector_c - 1, board_type);
             }
             break;
 
