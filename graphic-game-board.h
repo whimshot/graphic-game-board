@@ -30,19 +30,21 @@
 #define BOARD_SIZE 8 // 8x8 board = 64 squares
 #define CELL_SIZE 36
 #define SCREEN_PX 320
-#define BOARD_PX (BOARD_SIZE * CELL_SIZE)      // 288x288 pixel board
+#define BOARD_PX (BOARD_SIZE * CELL_SIZE) + 2 // 288x288 pixel board
 #define OFFSET_PX ((SCREEN_PX - BOARD_PX) / 2) // 16px margin left, right, top, and bottom
 #define SPRITE_SIZE 34
 
 // RGB565 Color Helper
 #define RGB565(r, g, b) ((((r) & 0xF8) << 8) | (((g) & 0xFC) << 3) | ((b) >> 3))
 
-#define COLOR_BG RGB565(20, 24, 28)
+#define COLOR_BG RGB565(2, 64, 64)
 #define COLOR_BOARD RGB565(2, 128, 2)
+#define COLOR_CELL RGB565(2, 128, 2)
+
 #define COLOR_GRID RGB565(2, 64, 64)
 #define COLOR_BLACK_DISC RGB565(10, 10, 10)
 #define COLOR_WHITE_DISC RGB565(224, 224, 224)
-#define COLOR_SELECTION_BOX RGB565(255, 215, 0)
+#define COLOR_SELECTOR RGB565(255, 215, 0)
 
 #define START_POSITION_ROW 2
 #define START_POSITION_COLUMN 3
@@ -68,8 +70,8 @@ extern uint8_t board[BOARD_SIZE][BOARD_SIZE];
 
 void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
 void place_piece(const uint16_t (*piece)[SPRITE_SIZE * SPRITE_SIZE], int c, int r);
-void erase_selector(void);
-void draw_selector(int new_c, int new_r);
+void erase_selector(uint16_t color);
+void draw_selector(int new_r, int new_c, uint16_t color);
 void move_selector(int new_c, int new_r);
 void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
 void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);

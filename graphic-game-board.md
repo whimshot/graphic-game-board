@@ -20,7 +20,7 @@ A lightweight C graphics template and interactive grid renderer for board games 
 ## Project Structure
 
 * `graphic-game-board.c` — Main application loop, board initialization, rendering routines (`render_board`, `draw_selector`), and keyboard input handling.
-* `graphic-game-board.h` — Header containing board dimensions (`BOARD_SIZE`, `CELL_SIZE`, `BOARD_PX`, `OFFSET_PX`), color definitions (`COLOR_BOARD`, `COLOR_GRID`, `COLOR_SELECTION_BOX`), piece enums (`EMPTY`, `BLACK`, `WHITE`), sprite arrays (`black_disc`, `white_disc`), and PicoCalc hardware includes.
+* `graphic-game-board.h` — Header containing board dimensions (`BOARD_SIZE`, `CELL_SIZE`, `BOARD_PX`, `OFFSET_PX`), color definitions (`COLOR_BOARD`, `COLOR_GRID`, `COLOR_SELECTOR`), piece enums (`EMPTY`, `BLACK`, `WHITE`), sprite arrays (`black_disc`, `white_disc`), and PicoCalc hardware includes.
 
 ## Prerequisites & Building
 
