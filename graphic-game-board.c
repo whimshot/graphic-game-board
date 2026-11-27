@@ -196,13 +196,14 @@ void init_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE])
             }
         }
     }
-
 }
 
-void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], char board_type)
+void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type)
 {
-    if (board_type == REVERSI) init_reversi_board(b);
-    else if (board_type == CHECKERS) init_checkers_board(b);
+    if (board_type == REVERSI)
+        init_reversi_board(b);
+    else if (board_type == CHECKERS)
+        init_checkers_board(b);
 }
 
 void place_piece(const uint16_t (*piece)[SPRITE_SIZE * SPRITE_SIZE], int r, int c)
@@ -211,6 +212,25 @@ void place_piece(const uint16_t (*piece)[SPRITE_SIZE * SPRITE_SIZE], int r, int 
     int y = (OFFSET_PX + CELL_SIZE * r) + 2;
     lcd_blit((*piece), x, y, SPRITE_SIZE, SPRITE_SIZE);
     sleep_ms(8);
+}
+
+void remove_piece(int r, int c, int board_type)
+{
+    switch (board_type)
+    {
+    case CHECKERS:
+        int x = (OFFSET_PX + CELL_SIZE * c) + 1;
+        int y = (OFFSET_PX + CELL_SIZE * r) + 1;
+        if ((c + r) % 2 == 0)
+        {
+            lcd_solid_rectangle(COLOR_CREAM, x, y, CELL_SIZE, CELL_SIZE);
+        }
+        else
+        {
+            lcd_solid_rectangle(COLOR_GREEN, x, y, CELL_SIZE, CELL_SIZE);
+        }
+        break;
+    }
 }
 
 // remove the selector box from the current location
@@ -242,7 +262,7 @@ void draw_selector(int new_r, int new_c, uint16_t color)
     lcd_solid_rectangle(color, lx, ry, l, w);         // Bottom
 }
 
-void move_selector(int new_r, int new_c, char board_type)
+void move_selector(int new_r, int new_c, int board_type)
 {
     if ((new_r < BOARD_SIZE && new_r >= 0) && (new_c < BOARD_SIZE && new_c >= 0))
     {
@@ -338,15 +358,17 @@ void draw_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE])
     }
 }
 
-void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], char board_type)
+void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type)
 {
-    if (board_type == REVERSI) draw_reversi_board(b);
-    else if (board_type == CHECKERS) draw_checkers_board(b);
+    if (board_type == REVERSI)
+        draw_reversi_board(b);
+    else if (board_type == CHECKERS)
+        draw_checkers_board(b);
 
     move_selector(selector_r, selector_c, board_type);
 }
 
-void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], char board_type)
+void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type)
 {
     for (int r = 0; r < BOARD_SIZE; r++)
     {
