@@ -206,6 +206,11 @@ void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type)
         init_checkers_board(b);
 }
 
+int get_piece(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int r, int c)
+{
+    return (*b)[r][c];
+}
+
 void place_piece(const uint16_t (*piece)[SPRITE_SIZE * SPRITE_SIZE], int r, int c)
 {
     int x = (OFFSET_PX + CELL_SIZE * c) + 2;
