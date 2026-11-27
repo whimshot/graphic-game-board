@@ -26,7 +26,7 @@ int main()
     sb_write_lcd_backlight(255);
     sb_write_keyboard_backlight(255);
 
-    char board_type = CHECKERS;
+    int board_type = CHECKERS;
     // Set up the initial game board state and draw it to the screen
     init_board(&board, board_type);
     render_board(&board, board_type);

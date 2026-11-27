@@ -81,13 +81,13 @@ extern uint8_t board[BOARD_SIZE][BOARD_SIZE];
 
 // --- Function Prototypes ---
 
-void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], char board_type);
+void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type);
 void place_piece(const uint16_t (*piece)[SPRITE_SIZE * SPRITE_SIZE], int c, int r);
 void erase_selector(uint16_t color);
 void draw_selector(int new_r, int new_c, uint16_t color);
-void move_selector(int new_r, int new_c, char board_type);
-void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], char board_type);
-void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], char board_type);
+void move_selector(int new_r, int new_c, int board_type);
+void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type);
+void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type);
 void draw_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
 void init_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
 void init_reversi_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
