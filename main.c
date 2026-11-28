@@ -26,11 +26,15 @@ int main()
     sb_write_lcd_backlight(255);
     sb_write_keyboard_backlight(255);
 
-    int board_type = CHECKERS;
-    // Set up the initial game board state and draw it to the screen
-    init_board(&board, board_type);
-    render_board(&board, board_type);
-    // draw_checkers_board();
+    // Set up the initial game board and game state
+    //
+    // void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type);
+    //
+    // Options for boardtype are
+    //      CHECKERS
+    //      REVERSI
+    init_board(&board, CHECKERS);
+    render_board(&board);
 
     // Track current turn: -1 represents white disc, 1 represents black disc
     int disc_color = -1;
@@ -52,42 +56,34 @@ int main()
         // Place a piece at the current selector position and switch turns
         case KEY_RETURN:
         case KEY_ENTER:
-            if (disc_color == -1)
-            {
-                place_piece(&white_disc, selector_r, selector_c);
-            }
-            else if (disc_color == 1)
-            {
-                place_piece(&black_disc, selector_r, selector_c);
-            }
-            disc_color = disc_color * -1; // Alternate player turn (-1 <-> 1)
+            select_square(&board, selector_r, selector_c);
             break;
 
         case KEY_UP:
             if (selector_r > 0)
             {
-                move_selector(selector_r - 1, selector_c, board_type);
+                move_selector(selector_r - 1, selector_c);
             }
             break;
 
         case KEY_DOWN:
             if (selector_r < BOARD_SIZE - 1)
             {
-                move_selector(selector_r + 1, selector_c, board_type);
+                move_selector(selector_r + 1, selector_c);
             }
             break;
 
         case KEY_RIGHT:
             if (selector_c < BOARD_SIZE - 1)
             {
-                move_selector(selector_r, selector_c + 1, board_type);
+                move_selector(selector_r, selector_c + 1);
             }
             break;
 
         case KEY_LEFT:
             if (selector_c > 0)
             {
-                move_selector(selector_r, selector_c - 1, board_type);
+                move_selector(selector_r, selector_c - 1);
             }
             break;
 
