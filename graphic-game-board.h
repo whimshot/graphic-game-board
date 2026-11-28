@@ -47,7 +47,7 @@
 // Draughts or Checkers square and piece colors
 // Checkers also uses COLOR_GREEN
 #define COLOR_CREAM RGB565(255, 253, 208) // light squares are cream
-#define COLOR_BLUE RGB565(0, 36, 192) // dark pieces are charcoal
+#define COLOR_BLUE RGB565(0, 36, 192)     // dark pieces are charcoal
 #define COLOR_RED RGB565(192, 36, 0)      // light pieces are classic red
 
 #define START_POSITION_ROW 2
@@ -61,10 +61,11 @@ extern const uint16_t black_disc[SPRITE_SIZE * SPRITE_SIZE];
 
 typedef enum
 {
-    EMPTY = 0,
-    WHITE = 1,
-    BLACK = 2,
-    RED = 3
+    EMPTY = 0, // square is empty
+    WHITE = 1, // white piece
+    BLACK = 2, // blac piece
+    RED = 3,   // red checker
+    BLUE = 4   // blue checker
 } GridSquareStates;
 
 typedef enum
@@ -84,12 +85,14 @@ extern uint8_t board[BOARD_SIZE][BOARD_SIZE];
 void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type);
 void place_piece(const uint16_t (*piece)[SPRITE_SIZE * SPRITE_SIZE], int c, int r);
 void erase_selector(uint16_t color);
-void draw_selector(int new_r, int new_c, uint16_t color);
-void move_selector(int new_r, int new_c, int board_type);
-void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type);
-void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type);
+void draw_selector(int new_r, int new_c);
+void move_selector(int new_r, int new_c);
+void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
+void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
 void draw_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
 void init_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
 void init_reversi_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE]);
+void select_square(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int r, int c);
+void remove_piece(int r, int c);
 
 #endif

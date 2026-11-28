@@ -148,6 +148,12 @@ const uint16_t red_checker[SPRITE_SIZE * SPRITE_SIZE] = {
 
 volatile bool user_interrupt = false;
 
+int board_type;
+bool piece_picked = false; // true when a square with a piece present is selected
+int selected_piece = 0;
+int selected_square_row = 0;
+int selected_square_col = 0;
+
 // Game state
 // create the board array
 // static uint8_t board[BOARD_SIZE][BOARD_SIZE];
@@ -182,7 +188,7 @@ void init_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE])
         {
             if ((c + r) % 2 != 0)
             {
-                (*b)[r][c] = BLACK;
+                (*b)[r][c] = BLUE;
             }
         }
     }
@@ -198,8 +204,9 @@ void init_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE])
     }
 }
 
-void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type)
+void init_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int bt)
 {
+    board_type = bt; // set the board for use elswhere
     if (board_type == REVERSI)
         init_reversi_board(b);
     else if (board_type == CHECKERS)
@@ -219,7 +226,43 @@ void place_piece(const uint16_t (*piece)[SPRITE_SIZE * SPRITE_SIZE], int r, int 
     sleep_ms(8);
 }
 
-void remove_piece(int r, int c, int board_type)
+void select_square(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int r, int c)
+{
+    int square_contents = get_piece(b, r, c);
+    if (board_type == CHECKERS)
+    {
+        // Only place a selected piece on a square that is
+        // empty and green
+        if (piece_picked && (square_contents == EMPTY) && ((c + r) % 2 != 0))
+        {
+            switch (selected_piece)
+            {
+            case BLUE:
+                place_piece(&blue_checker, r, c);
+                (*b)[r][c] = BLUE;
+                break;
+            case RED:
+                place_piece(&red_checker, r, c);
+                (*b)[r][c] = RED;
+                break;
+            default:
+                break;
+            }
+            piece_picked = false;
+            remove_piece(selected_square_row, selected_square_col);
+            (*b)[selected_square_row][selected_square_col] = EMPTY;
+            draw_selector(r, c);
+        }
+        else if (!piece_picked && square_contents != EMPTY)
+        {
+            selected_piece = square_contents;
+            piece_picked = true;
+            selected_square_col = c;
+            selected_square_row = r;
+        }
+    }
+}
+void remove_piece(int r, int c)
 {
     switch (board_type)
     {
@@ -253,7 +296,7 @@ void erase_selector(uint16_t color)
     lcd_solid_rectangle(color, lx, ry, l, w);              // Bottom
 }
 
-void draw_selector(int new_r, int new_c, uint16_t color)
+void draw_selector(int new_r, int new_c)
 {
     int lx = CELL_SIZE * new_c + OFFSET_PX + 2;       // left selection box bar
     int rx = CELL_SIZE * (new_c + 1) + OFFSET_PX - 1; // right selection box bar
@@ -261,13 +304,13 @@ void draw_selector(int new_r, int new_c, uint16_t color)
     int ry = CELL_SIZE * (new_r + 1) + OFFSET_PX - 1; // bottom selection box bar
     int l = SPRITE_SIZE;                              // selection box border bar length
     int w = 1;                                        // selection box border bar width
-    lcd_solid_rectangle(color, lx, ly, w, l);         // Left
-    lcd_solid_rectangle(color, lx, ly, l, w);         // Top
-    lcd_solid_rectangle(color, rx, ly, w, l);         // Right
-    lcd_solid_rectangle(color, lx, ry, l, w);         // Bottom
+    lcd_solid_rectangle(COLOR_SELECTOR, lx, ly, w, l);         // Left
+    lcd_solid_rectangle(COLOR_SELECTOR, lx, ly, l, w);         // Top
+    lcd_solid_rectangle(COLOR_SELECTOR, rx, ly, w, l);         // Right
+    lcd_solid_rectangle(COLOR_SELECTOR, lx, ry, l, w);         // Bottom
 }
 
-void move_selector(int new_r, int new_c, int board_type)
+void move_selector(int new_r, int new_c)
 {
     if ((new_r < BOARD_SIZE && new_r >= 0) && (new_c < BOARD_SIZE && new_c >= 0))
     {
@@ -281,12 +324,12 @@ void move_selector(int new_r, int new_c, int board_type)
             {
                 erase_selector(COLOR_CREAM);
             }
-            else
+            else if (!piece_picked || (selector_r != selected_square_row) || (selector_c != selected_square_col))
             {
                 erase_selector(COLOR_GREEN);
             }
         }
-        draw_selector(new_r, new_c, COLOR_SELECTOR);
+        draw_selector(new_r, new_c);
         // set new selection box position
         selector_c = new_c;
         selector_r = new_r;
@@ -351,7 +394,7 @@ void draw_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE])
         {
             if ((*b)[r][c] == EMPTY)
                 continue;
-            else if ((*b)[r][c] == BLACK)
+            else if ((*b)[r][c] == BLUE)
             {
                 place_piece(&blue_checker, r, c);
             }
@@ -363,17 +406,17 @@ void draw_checkers_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE])
     }
 }
 
-void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type)
+void render_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE])
 {
     if (board_type == REVERSI)
         draw_reversi_board(b);
     else if (board_type == CHECKERS)
         draw_checkers_board(b);
 
-    move_selector(selector_r, selector_c, board_type);
+    move_selector(selector_r, selector_c);
 }
 
-void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type)
+void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE])
 {
     for (int r = 0; r < BOARD_SIZE; r++)
     {
@@ -393,5 +436,5 @@ void redraw_board(uint8_t (*b)[BOARD_SIZE][BOARD_SIZE], int board_type)
             }
         }
     }
-    move_selector(selector_r, selector_c, board_type);
+    move_selector(selector_r, selector_c);
 }
